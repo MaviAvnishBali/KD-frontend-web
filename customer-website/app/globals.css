@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 255 248 240;
+    --foreground: 26 10 10;
+    --card: 255 255 255;
+    --card-foreground: 26 10 10;
+    --primary: 124 29 29;
+    --primary-foreground: 255 248 240;
+    --secondary: 245 158 11;
+    --secondary-foreground: 26 10 10;
+    --muted: 241 235 229;
+    --muted-foreground: 120 80 80;
+    --border: 231 220 210;
+    --ring: 124 29 29;
+  }
+
+  .dark {
+    --background: 26 10 10;
+    --foreground: 255 248 240;
+    --card: 45 20 20;
+    --card-foreground: 255 248 240;
+    --primary: 245 158 11;
+    --primary-foreground: 26 10 10;
+    --muted: 60 25 25;
+    --muted-foreground: 200 160 140;
+    --border: 80 30 30;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-royal-cream text-royal-dark dark:bg-royal-dark dark:text-royal-cream;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3 {
+    @apply font-serif;
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-maroon-800 rounded-full;
+  }
+}
+
+@layer components {
+  /* Royal Button */
+  .btn-royal {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg
+           bg-royal-gradient text-royal-cream font-semibold
+           shadow-royal hover:shadow-gold transition-all duration-300
+           hover:-translate-y-0.5 active:translate-y-0
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg
+           bg-gold-gradient text-royal-dark font-semibold
+           shadow-gold hover:opacity-90 transition-all duration-300
+           hover:-translate-y-0.5;
+  }
+
+  .btn-outline-royal {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg
+           border-2 border-royal-maroon text-royal-maroon font-semibold
+           hover:bg-royal-maroon hover:text-royal-cream transition-all duration-300;
+  }
+
+  /* Cards */
+  .card-royal {
+    @apply bg-white dark:bg-card rounded-2xl shadow-card border border-border
+           overflow-hidden transition-shadow hover:shadow-royal;
+  }
+
+  /* Food type badges */
+  .badge-veg {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold
+           border border-green-500 text-green-700 bg-green-50;
+  }
+
+  .badge-nonveg {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold
+           border border-red-500 text-red-700 bg-red-50;
+  }
+
+  .badge-jain {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold
+           border border-yellow-500 text-yellow-700 bg-yellow-50;
+  }
+
+  /* Section title */
+  .section-title {
+    @apply text-3xl md:text-4xl font-serif font-bold text-royal-maroon dark:text-brand-gold-400;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-muted-foreground mt-2;
+  }
+
+  /* Gold divider */
+  .gold-divider {
+    @apply flex items-center gap-4 my-6;
+  }
+
+  .gold-divider::before,
+  .gold-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: #f59e0b;
+  }
+
+  /* Input fields */
+  .input-royal {
+    @apply w-full px-4 py-3 rounded-lg border border-border bg-white dark:bg-card
+           text-foreground placeholder:text-muted-foreground
+           focus:outline-none focus:ring-2 focus:ring-royal-maroon
+           transition-all duration-200;
+  }
+
+  /* Quantity stepper */
+  .qty-btn {
+    @apply w-8 h-8 rounded-full flex items-center justify-center
+           border-2 border-royal-maroon text-royal-maroon
+           hover:bg-royal-maroon hover:text-white transition-colors;
+  }
+
+  /* Mughal border pattern */
+  .mughal-border {
+    @apply relative before:absolute before:inset-0
+           before:border-2 before:border-brand-gold-500 before:rounded-2xl
+           before:opacity-30 before:pointer-events-none;
+  }
+}
+
+@layer utilities {
+  .text-gradient-royal {
+    @apply bg-clip-text text-transparent bg-royal-gradient;
+  }
+
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent bg-gold-gradient;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+}
