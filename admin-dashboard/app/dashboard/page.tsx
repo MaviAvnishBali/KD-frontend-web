@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AdminShell } from "../components/AdminShell";
 import { useQuery } from "@tanstack/react-query";
 import {
   ShoppingBag,
@@ -55,6 +58,15 @@ interface DashboardStats {
 }
 
 export default function DashboardPage() {
+  const [qc] = useState(() => new QueryClient());
+  return (
+    <QueryClientProvider client={qc}>
+      <AdminShell><DashboardInner /></AdminShell>
+    </QueryClientProvider>
+  );
+}
+
+function DashboardInner() {
   const { data: stats, isLoading } = useQuery<DashboardStats>({
     queryKey: ["dashboard"],
     queryFn: () => api.get("/reports/dashboard").then((r) => r.data.data),

@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --maroon: #7C1D1D;
+  --gold:   #D4AF37;
+}
+
+body { @apply bg-gray-50 text-gray-900; }
+
+.btn-primary   { @apply bg-royal-maroon text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-maroon-700 transition-colors disabled:opacity-50; }
+.btn-secondary { @apply bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors; }
+.btn-danger    { @apply bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-700 transition-colors; }
+.input         { @apply w-full border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-royal-maroon focus:ring-1 focus:ring-royal-maroon transition-colors; }
+.card          { @apply bg-white rounded-2xl border border-gray-100 shadow-sm; }
