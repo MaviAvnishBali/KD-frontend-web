@@ -4,169 +4,220 @@
 
 @layer base {
   :root {
-    --background: 255 248 240;
-    --foreground: 26 10 10;
-    --card: 255 255 255;
-    --card-foreground: 26 10 10;
-    --primary: 124 29 29;
-    --primary-foreground: 255 248 240;
-    --secondary: 245 158 11;
-    --secondary-foreground: 26 10 10;
-    --muted: 241 235 229;
-    --muted-foreground: 120 80 80;
-    --border: 231 220 210;
-    --ring: 124 29 29;
-  }
-
-  .dark {
-    --background: 26 10 10;
-    --foreground: 255 248 240;
-    --card: 45 20 20;
-    --card-foreground: 255 248 240;
-    --primary: 245 158 11;
-    --primary-foreground: 26 10 10;
-    --muted: 60 25 25;
-    --muted-foreground: 200 160 140;
-    --border: 80 30 30;
+    --background: 17 17 17;
+    --foreground: 248 244 233;
+    --card: 26 10 11;
+    --card-foreground: 248 244 233;
+    --primary: 212 175 55;
+    --primary-foreground: 17 17 17;
+    --muted: 30 18 20;
+    --muted-foreground: 180 155 130;
+    --border: 60 30 30;
+    --ring: 212 175 55;
+    --maroon: 107 15 26;
+    --gold: 212 175 55;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+/* ── Custom cursor ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  cursor: none !important;
+}
 
-  body {
-    @apply bg-royal-cream text-royal-dark dark:bg-royal-dark dark:text-royal-cream;
-    font-feature-settings: "rlig" 1, "calt" 1;
+@media (pointer: coarse) {
+  *, *::before, *::after {
+    cursor: auto !important;
   }
+}
 
-  h1, h2, h3 {
-    @apply font-serif;
-  }
+html {
+  scroll-behavior: auto; /* Lenis handles smoothness */
+  overflow-x: hidden;
+}
 
-  a {
-    @apply transition-colors duration-200;
-  }
+body {
+  background-color: #111111;
+  color: #F8F4E9;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  /* Scrollbar styling */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #D4AF37, #6B0F1A);
+  border-radius: 99px;
+}
 
-  ::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
+/* ── Selection ── */
+::selection {
+  background: rgba(212, 175, 55, 0.3);
+  color: #F8F4E9;
+}
 
-  ::-webkit-scrollbar-thumb {
-    @apply bg-brand-maroon-800 rounded-full;
-  }
+/* ── Typography ── */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-cinzel), serif;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
 }
 
 @layer components {
-  /* Royal Button */
-  .btn-royal {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg
-           bg-royal-gradient text-royal-cream font-semibold
-           shadow-royal hover:shadow-gold transition-all duration-300
-           hover:-translate-y-0.5 active:translate-y-0
-           disabled:opacity-50 disabled:cursor-not-allowed;
-  }
 
+  /* ── Buttons ── */
   .btn-gold {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg
-           bg-gold-gradient text-royal-dark font-semibold
-           shadow-gold hover:opacity-90 transition-all duration-300
-           hover:-translate-y-0.5;
+    @apply relative inline-flex items-center justify-center gap-2.5
+           px-8 py-4 font-royal text-sm tracking-[0.15em] uppercase
+           overflow-hidden;
+    background: linear-gradient(135deg, #D4AF37, #b8962e);
+    color: #111111;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
-
-  .btn-outline-royal {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg
-           border-2 border-royal-maroon text-royal-maroon font-semibold
-           hover:bg-royal-maroon hover:text-royal-cream transition-all duration-300;
-  }
-
-  /* Cards */
-  .card-royal {
-    @apply bg-white dark:bg-card rounded-2xl shadow-card border border-border
-           overflow-hidden transition-shadow hover:shadow-royal;
-  }
-
-  /* Food type badges */
-  .badge-veg {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold
-           border border-green-500 text-green-700 bg-green-50;
-  }
-
-  .badge-nonveg {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold
-           border border-red-500 text-red-700 bg-red-50;
-  }
-
-  .badge-jain {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold
-           border border-yellow-500 text-yellow-700 bg-yellow-50;
-  }
-
-  /* Section title */
-  .section-title {
-    @apply text-3xl md:text-4xl font-serif font-bold text-royal-maroon dark:text-brand-gold-400;
-  }
-
-  .section-subtitle {
-    @apply text-lg text-muted-foreground mt-2;
-  }
-
-  /* Gold divider */
-  .gold-divider {
-    @apply flex items-center gap-4 my-6;
-  }
-
-  .gold-divider::before,
-  .gold-divider::after {
+  .btn-gold::before {
     content: '';
-    flex: 1;
-    height: 1px;
-    background-color: #f59e0b;
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, #F5D060, #D4AF37);
+  }
+  .btn-gold:hover::before { @apply opacity-100; }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(212,175,55,0.4); }
+
+  .btn-outline-gold {
+    @apply relative inline-flex items-center justify-center gap-2.5
+           px-8 py-4 font-royal text-sm tracking-[0.15em] uppercase
+           border border-gold-400 text-gold-400 overflow-hidden;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-outline-gold::before {
+    content: '';
+    @apply absolute inset-0 -translate-x-full transition-transform duration-500;
+    background: linear-gradient(135deg, #D4AF37, #b8962e);
+  }
+  .btn-outline-gold:hover::before { transform: translateX(0); }
+  .btn-outline-gold:hover { @apply text-obsidian; transform: translateY(-2px); }
+  .btn-outline-gold span { @apply relative z-10; }
+
+  /* ── Glass morphism ── */
+  .glass {
+    background: rgba(17, 17, 17, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.12);
   }
 
-  /* Input fields */
-  .input-royal {
-    @apply w-full px-4 py-3 rounded-lg border border-border bg-white dark:bg-card
-           text-foreground placeholder:text-muted-foreground
-           focus:outline-none focus:ring-2 focus:ring-royal-maroon
-           transition-all duration-200;
+  .glass-light {
+    background: rgba(248, 244, 233, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(248, 244, 233, 0.08);
   }
 
-  /* Quantity stepper */
-  .qty-btn {
-    @apply w-8 h-8 rounded-full flex items-center justify-center
-           border-2 border-royal-maroon text-royal-maroon
-           hover:bg-royal-maroon hover:text-white transition-colors;
+  /* ── Gold shimmer text ── */
+  .text-gold-shimmer {
+    background: linear-gradient(
+      90deg,
+      #D4AF37 0%,
+      #F5E07A 30%,
+      #D4AF37 50%,
+      #9a7d20 70%,
+      #D4AF37 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
   }
 
-  /* Mughal border pattern */
-  .mughal-border {
-    @apply relative before:absolute before:inset-0
-           before:border-2 before:border-brand-gold-500 before:rounded-2xl
-           before:opacity-30 before:pointer-events-none;
+  /* ── Section heading ── */
+  .section-eyebrow {
+    @apply font-royal text-xs tracking-[0.35em] uppercase text-gold-400 mb-4;
+  }
+
+  .section-title {
+    @apply font-royal text-4xl md:text-5xl lg:text-6xl text-ivory leading-tight;
+  }
+
+  .section-title-gold {
+    @apply font-royal text-4xl md:text-5xl lg:text-6xl text-gold-shimmer leading-tight;
+  }
+
+  /* ── Decorative line ── */
+  .gold-line {
+    @apply w-16 h-px bg-gradient-to-r from-transparent via-gold-400 to-transparent my-6;
+  }
+
+  /* ── Card ── */
+  .card-luxury {
+    background: rgba(26, 10, 11, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.12);
+    backdrop-filter: blur(12px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-luxury:hover {
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 20px 60px rgba(107, 15, 26, 0.4), 0 0 0 1px rgba(212,175,55,0.1);
+    transform: translateY(-6px);
+  }
+
+  /* ── Mughal ornament border ── */
+  .mughal-frame {
+    @apply relative;
+  }
+  .mughal-frame::before, .mughal-frame::after {
+    content: '❋';
+    @apply absolute text-gold-400 text-lg opacity-60;
+  }
+  .mughal-frame::before { @apply top-0 left-0; }
+  .mughal-frame::after  { @apply bottom-0 right-0 rotate-180; }
+
+  /* ── Noise texture overlay ── */
+  .noise::after {
+    content: '';
+    @apply absolute inset-0 pointer-events-none opacity-[0.035];
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+  }
+
+  /* ── Food badge ── */
+  .badge-veg {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-xs font-semibold
+           border border-green-500/60 text-green-400 bg-green-500/10;
+  }
+  .badge-nonveg {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-xs font-semibold
+           border border-red-500/60 text-red-400 bg-red-500/10;
   }
 }
 
 @layer utilities {
-  .text-gradient-royal {
-    @apply bg-clip-text text-transparent bg-royal-gradient;
+  .text-ivory { color: #F8F4E9; }
+  .text-obsidian { color: #111111; }
+  .bg-obsidian { background-color: #111111; }
+  .bg-maroon { background-color: #6B0F1A; }
+
+  .clip-hex {
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
   }
 
-  .text-gradient-gold {
-    @apply bg-clip-text text-transparent bg-gold-gradient;
-  }
+  .text-balance { text-wrap: balance; }
 
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
+  /* Reveal animation states */
+  .reveal-hidden {
+    opacity: 0;
+    transform: translateY(48px);
   }
-
-  .animate-slide-up {
-    animation: slideUp 0.4s ease-out;
+  .reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
   }
 }

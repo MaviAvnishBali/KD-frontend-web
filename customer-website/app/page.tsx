@@ -1,23 +1,29 @@
-import { HeroSection } from "./components/layout/HeroSection";
-import { FeaturedCategories } from "./components/menu/FeaturedCategories";
-import { BestSellers } from "./components/menu/BestSellers";
-import { WhyChooseUs } from "./components/layout/WhyChooseUs";
-import { SpecialOffers } from "./components/layout/SpecialOffers";
-import { Testimonials } from "./components/layout/Testimonials";
-import { ReservationCTA } from "./components/layout/ReservationCTA";
-import { AppDownloadBanner } from "./components/layout/AppDownloadBanner";
+import { Navbar }            from "./components/layout/Navbar";
+import { HeroSection }      from "./components/layout/HeroSection";
+import { StatsBar }          from "./components/sections/StatsBar";
+import { SignatureDishes }   from "./components/sections/SignatureDishes";
+import { BestSellers }       from "./components/menu/BestSellers";
+import { RoyalExperience }   from "./components/sections/RoyalExperience";
+import { ChefSpecial }       from "./components/sections/ChefSpecial";
+import { Testimonials }      from "./components/layout/Testimonials";
+import { Gallery }           from "./components/sections/Gallery";
+import { ReservationCTA }    from "./components/layout/ReservationCTA";
+import { Footer }            from "./components/layout/Footer";
 
 export default function HomePage() {
   return (
-    <main>
+    <main className="bg-obsidian">
+      <Navbar />
       <HeroSection />
-      <FeaturedCategories />
+      <StatsBar />
+      <SignatureDishes />
       <BestSellers />
-      <SpecialOffers />
-      <WhyChooseUs />
-      <ReservationCTA />
+      <RoyalExperience />
+      <ChefSpecial />
       <Testimonials />
-      <AppDownloadBanner />
+      <Gallery />
+      <ReservationCTA />
+      <Footer />
     </main>
   );
 }

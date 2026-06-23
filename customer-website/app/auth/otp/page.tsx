@@ -13,7 +13,8 @@ const RESEND_DELAY = 60;
 function OtpPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const phone = searchParams.get("phone") ?? "";
+  const phone     = searchParams.get("phone") ?? "";
+  const returnUrl = searchParams.get("returnUrl") ?? "/";
   const { verifyOtp, sendOtp, isLoading } = useAuthStore();
 
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(""));
@@ -79,7 +80,7 @@ function OtpPageInner() {
     try {
       await verifyOtp(phone, otp);
       toast.success("Welcome to Kila Darbar!");
-      router.replace("/");
+      router.replace(returnUrl);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Invalid OTP, please try again";
       setError(message);
@@ -92,7 +93,7 @@ function OtpPageInner() {
   const handleResend = async () => {
     try {
       await sendOtp(phone);
-      toast.success("OTP resent!");
+      toast.success("OTP resent successfully!");
       setSecondsLeft(RESEND_DELAY);
       setDigits(Array(OTP_LENGTH).fill(""));
       setError(null);

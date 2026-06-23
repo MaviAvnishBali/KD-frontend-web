@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display, Cinzel } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import { Inter, Playfair_Display, Cinzel, Cormorant_Garamond } from "next/font/google";
 import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
+import { CustomCursor } from "./components/ui/CustomCursor";
+import { SmoothScroll } from "./components/ui/SmoothScroll";
+import { FloatingWidgets } from "./components/ui/FloatingWidgets";
+import { ScrollProgress } from "./components/ui/ScrollProgress";
 import "./globals.css";
 
 const inter = Inter({
@@ -23,26 +26,22 @@ const cinzel = Cinzel({
   display: "swap",
 });
 
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: "Kila Darbar | Royal Mughal Dining Experience",
     template: "%s | Kila Darbar",
   },
   description:
-    "Experience the grandeur of Royal Mughal cuisine at Kila Darbar. Authentic flavors, regal ambiance. Order online, book a table, or plan your special event.",
-  keywords: [
-    "Kila Darbar",
-    "Mughal restaurant",
-    "Royal dining",
-    "biryani",
-    "kebab",
-    "online food order",
-    "table reservation",
-    "catering",
-    "family restaurant",
-  ],
+    "Experience the grandeur of Royal Mughal cuisine at Kila Darbar. Authentic flavors, regal ambiance, and an unforgettable dining experience.",
+  keywords: ["Kila Darbar", "Mughal restaurant", "Royal dining", "biryani", "kebab", "luxury restaurant"],
   authors: [{ name: "Kila Darbar" }],
-  creator: "Kila Darbar",
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -58,51 +57,43 @@ export const metadata: Metadata = {
     description: "Royal Mughal Dining Experience",
     images: ["/og-image.jpg"],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
-  manifest: "/manifest.json",
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#7C1D1D",
+  themeColor: "#111111",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <body
-        className={`${inter.variable} ${playfair.variable} ${cinzel.variable} font-sans antialiased`}
+        className={`${inter.variable} ${playfair.variable} ${cinzel.variable} ${cormorant.variable} font-sans antialiased bg-obsidian text-ivory overflow-x-hidden`}
       >
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <SmoothScroll>
           <Providers>
+            <CustomCursor />
+            <ScrollProgress />
             {children}
+            <FloatingWidgets />
             <Toaster
               position="top-center"
               toastOptions={{
                 style: {
-                  borderRadius: "8px",
-                  background: "#1A0A0A",
-                  color: "#FFF8F0",
-                  border: "1px solid #7C1D1D",
+                  borderRadius: "0",
+                  background: "#1a0a0b",
+                  color: "#F8F4E9",
+                  border: "1px solid rgba(212,175,55,0.3)",
+                  fontFamily: "var(--font-cormorant)",
+                  fontSize: "16px",
                 },
-                success: { iconTheme: { primary: "#F59E0B", secondary: "#1A0A0A" } },
+                success: { iconTheme: { primary: "#D4AF37", secondary: "#111" } },
               }}
             />
           </Providers>
-        </ThemeProvider>
+        </SmoothScroll>
       </body>
     </html>
   );

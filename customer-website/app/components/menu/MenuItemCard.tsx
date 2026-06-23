@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Plus, Minus, Star, Clock, Flame } from "lucide-react";
-import { useCartStore } from "../../hooks/useCartStore";
+import { useCart, useAddToCart, useUpdateCartItem, useRemoveCartItem } from "../../lib/api/hooks";
 import { cn } from "../../lib/utils";
 import type { MenuItem } from "../../types/menu";
 
@@ -30,8 +30,17 @@ const FoodTypeDot = ({ type }: { type: string }) => {
 
 export function MenuItemCard({ item, variant = "grid" }: MenuItemCardProps) {
   const [imageError, setImageError] = useState(false);
-  const { addItem, removeItem, getItemQuantity } = useCartStore();
-  const quantity = getItemQuantity(item.id);
+  const { data: cart } = useCart();
+  const addToCart      = useAddToCart();
+  const updateCartItem = useUpdateCartItem();
+  const removeCartItem = useRemoveCartItem();
+  const quantity = cart?.items.find((ci) => ci.menuItemId === item.id)?.quantity ?? 0;
+
+  const handleAdd = () => addToCart.mutate({ menuItemId: item.id });
+  const handleRemove = () => {
+    if (quantity > 1) updateCartItem.mutate({ itemId: item.id, qty: quantity - 1 });
+    else removeCartItem.mutate(item.id);
+  };
 
   const hasDiscount = item.discountPrice && item.discountPrice < item.price;
   const effectivePrice = hasDiscount ? item.discountPrice! : item.price;
@@ -91,8 +100,8 @@ export function MenuItemCard({ item, variant = "grid" }: MenuItemCardProps) {
           </div>
           <AddToCartButton
             quantity={quantity}
-            onAdd={() => addItem(item)}
-            onRemove={() => removeItem(item.id)}
+            onAdd={handleAdd}
+            onRemove={handleRemove}
             disabled={!item.isAvailable}
           />
         </div>
@@ -190,8 +199,8 @@ export function MenuItemCard({ item, variant = "grid" }: MenuItemCardProps) {
 
           <AddToCartButton
             quantity={quantity}
-            onAdd={() => addItem(item)}
-            onRemove={() => removeItem(item.id)}
+            onAdd={handleAdd}
+            onRemove={handleRemove}
             disabled={!item.isAvailable}
           />
         </div>

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import api from "../lib/api";
+import api, { tokens } from "../lib/api";
 
 interface User {
   id: string;
@@ -38,7 +38,7 @@ export const useAuthStore = create<AuthState>()(
       sendOtp: async (phone) => {
         set({ isLoading: true });
         try {
-          await api.post("/auth/otp/send", { phone });
+          await api.post("auth/send-otp", { phone });
         } finally {
           set({ isLoading: false });
         }
@@ -47,10 +47,10 @@ export const useAuthStore = create<AuthState>()(
       verifyOtp: async (phone, otp) => {
         set({ isLoading: true });
         try {
-          const { data } = await api.post("/auth/otp/verify", { phone, otp });
+          const { data } = await api.post("auth/verify-otp", { phone, otp });
           const { accessToken, refreshToken, user } = data.data;
+          tokens.save(accessToken, refreshToken);
           set({ user, accessToken, refreshToken });
-          api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
         } finally {
           set({ isLoading: false });
         }
@@ -59,10 +59,10 @@ export const useAuthStore = create<AuthState>()(
       googleLogin: async (idToken) => {
         set({ isLoading: true });
         try {
-          const { data } = await api.post("/auth/google", { idToken });
+          const { data } = await api.post("auth/google", { idToken });
           const { accessToken, refreshToken, user } = data.data;
+          tokens.save(accessToken, refreshToken);
           set({ user, accessToken, refreshToken });
-          api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
         } finally {
           set({ isLoading: false });
         }
@@ -70,9 +70,9 @@ export const useAuthStore = create<AuthState>()(
 
       logout: async () => {
         try {
-          await api.post("/auth/logout");
+          await api.post("auth/logout");
         } catch {}
-        delete api.defaults.headers.common["Authorization"];
+        tokens.clear();
         set({ user: null, accessToken: null, refreshToken: null });
       },
 
@@ -85,9 +85,9 @@ export const useAuthStore = create<AuthState>()(
       refreshAccessToken: async () => {
         const { refreshToken } = get();
         if (!refreshToken) return;
-        const { data } = await api.post("/auth/refresh", { refreshToken });
+        const { data } = await api.post("auth/refresh-token", { refreshToken });
+        tokens.saveAccess(data.data.accessToken);
         set({ accessToken: data.data.accessToken });
-        api.defaults.headers.common["Authorization"] = `Bearer ${data.data.accessToken}`;
       },
     }),
     {
