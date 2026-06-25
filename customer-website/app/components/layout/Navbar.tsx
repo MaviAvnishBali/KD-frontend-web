@@ -13,10 +13,10 @@ const navLinks = [
   { href: "/",             label: "Home" },
   { href: "/menu",         label: "Menu" },
   { href: "/reservations", label: "Reserve" },
+  { href: "/party-hall",   label: "Party Hall" },
   { href: "/offers",       label: "Offers" },
   { href: "/catering",     label: "Catering" },
   { href: "/about",        label: "Our Story" },
-  { href: "/contact",      label: "Contact" },
 ];
 
 function MughalLogo() {

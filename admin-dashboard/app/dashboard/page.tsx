@@ -57,8 +57,12 @@ interface DashboardStats {
   }>;
 }
 
+const devQueryClient = () => new QueryClient({
+  defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } },
+});
+
 export default function DashboardPage() {
-  const [qc] = useState(() => new QueryClient());
+  const [qc] = useState(devQueryClient);
   return (
     <QueryClientProvider client={qc}>
       <AdminShell><DashboardInner /></AdminShell>
@@ -67,10 +71,12 @@ export default function DashboardPage() {
 }
 
 function DashboardInner() {
+  const isDev = process.env.NODE_ENV === "development";
   const { data: stats, isLoading } = useQuery<DashboardStats>({
     queryKey: ["dashboard"],
-    queryFn: () => api.get("/reports/dashboard").then((r) => r.data.data),
-    refetchInterval: 30000,
+    queryFn: () => api.get("reports/dashboard").then((r) => r.data.data),
+    refetchInterval: isDev ? false : 30000,
+    retry: isDev ? false : 3,
   });
 
   if (isLoading) {

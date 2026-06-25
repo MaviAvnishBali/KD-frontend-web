@@ -8,8 +8,9 @@ import toast from "react-hot-toast";
 import {
   authApi, userApi, menuApi,
   cartApi, orderApi, reservationApi, loyaltyApi,
-  bannerApi, offerApi,
+  bannerApi, offerApi, partyHallApi,
 } from "./endpoints";
+import type { CreatePartyHallBookingRequest } from "./types";
 
 // ── Query keys ────────────────────────────────────────────────────────────────
 export const QK = {
@@ -280,6 +281,34 @@ export function useLoyalty() {
     queryKey: QK.loyalty,
     queryFn:  () => loyaltyApi.get().then((r) => r.data.data),
     staleTime: 5 * 60 * 1000,
+  });
+}
+
+// ── Party Hall ────────────────────────────────────────────────────────────────
+export function useMyPartyHallBookings() {
+  return useQuery({
+    queryKey: ["party-hall-bookings"],
+    queryFn:  () => partyHallApi.myBookings().then((r) => r.data.data ?? []),
+  });
+}
+
+export function useBookPartyHall() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreatePartyHallBookingRequest) => partyHallApi.book(payload),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["party-hall-bookings"] });
+      toast.success("Party hall booked! We'll confirm shortly 🎉");
+    },
+    onError: (e: any) => toast.error(e.message ?? "Booking failed"),
+  });
+}
+
+export function useCancelPartyHallBooking() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => partyHallApi.cancel(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["party-hall-bookings"] }),
   });
 }
 

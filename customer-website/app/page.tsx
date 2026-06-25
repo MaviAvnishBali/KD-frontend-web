@@ -7,6 +7,7 @@ import { RoyalExperience }   from "./components/sections/RoyalExperience";
 import { ChefSpecial }       from "./components/sections/ChefSpecial";
 import { Testimonials }      from "./components/layout/Testimonials";
 import { Gallery }           from "./components/sections/Gallery";
+import { PartyHallCTA }      from "./components/sections/PartyHallCTA";
 import { ReservationCTA }    from "./components/layout/ReservationCTA";
 import { Footer }            from "./components/layout/Footer";
 
@@ -22,6 +23,7 @@ export default function HomePage() {
       <ChefSpecial />
       <Testimonials />
       <Gallery />
+      <PartyHallCTA />
       <ReservationCTA />
       <Footer />
     </main>

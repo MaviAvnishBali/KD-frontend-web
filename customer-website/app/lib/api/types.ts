@@ -210,6 +210,38 @@ export interface Offer {
   displayOrder:   number;
 }
 
+// ── Party Hall ───────────────────────────────────────────────────────────────
+export type PartyHallPackage = "BASIC" | "ROYAL" | "GRAND";
+export type PartyHallStatus  = "PENDING" | "CONFIRMED" | "CANCELLED";
+
+export interface PartyHallBooking {
+  id:              string;
+  customerName:    string;
+  customerPhone:   string;
+  customerEmail:   string | null;
+  eventType:       string;
+  guestCount:      number;
+  preferredDate:   string;
+  preferredTime:   string;
+  packageType:     PartyHallPackage;
+  specialRequests: string | null;
+  status:          PartyHallStatus;
+  totalAmount:     number | null;
+  createdAt:       string;
+}
+
+export interface CreatePartyHallBookingRequest {
+  customerName:    string;
+  customerPhone:   string;
+  customerEmail?:  string;
+  eventType:       string;
+  guestCount:      number;
+  preferredDate:   string;
+  preferredTime:   string;
+  packageType:     PartyHallPackage;
+  specialRequests?: string;
+}
+
 // ── Loyalty ───────────────────────────────────────────────────────────────────
 export interface Loyalty {
   points:         number;

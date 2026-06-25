@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { QueryClient, QueryClientProvider, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Pencil, Trash2, ToggleLeft, ToggleRight, Search, X, ChevronDown } from "lucide-react";
+import { Plus, Pencil, Trash2, ToggleLeft, ToggleRight, Search, X, ChevronDown, ImagePlus, ImageOff } from "lucide-react";
+import { useRef } from "react";
 import { AdminShell } from "../components/AdminShell";
 import api from "../lib/api";
 
@@ -12,6 +13,7 @@ interface MenuItem {
   discountPrice: number | null; foodType: string; categoryId: number;
   preparationTime: number; isAvailable: boolean; isBestSeller: boolean;
   rating: number | null;
+  images: { url: string; isPrimary: boolean }[] | null;
 }
 interface Category { id: number; name: string; }
 
@@ -138,6 +140,64 @@ function ItemModal({ item, categories, onClose }: {
   );
 }
 
+/* ── Image upload cell ── */
+function ImageCell({ item }: { item: MenuItem }) {
+  const qc = useQueryClient();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const primaryUrl = item.images?.find((i) => i.isPrimary)?.url ?? item.images?.[0]?.url ?? null;
+
+  const upload = useMutation({
+    mutationFn: async (file: File) => {
+      const fd = new FormData();
+      fd.append("image", file);
+      return api.post(`admin/menu/items/${item.id}/images`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-menu"] }),
+  });
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) upload.mutate(file);
+    e.target.value = "";
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      {/* Thumbnail */}
+      <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100 flex items-center justify-center">
+        {primaryUrl ? (
+          <img src={primaryUrl} alt={item.name} className="w-full h-full object-cover" />
+        ) : (
+          <ImageOff className="w-4 h-4 text-gray-300" />
+        )}
+      </div>
+
+      {/* Upload button */}
+      <button
+        onClick={() => inputRef.current?.click()}
+        disabled={upload.isPending}
+        className="p-1.5 hover:bg-blue-50 text-blue-500 rounded-lg transition-colors disabled:opacity-50"
+        title={primaryUrl ? "Replace image" : "Upload image"}
+      >
+        {upload.isPending
+          ? <span className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin block" />
+          : <ImagePlus className="w-4 h-4" />
+        }
+      </button>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="hidden"
+        onChange={handleFile}
+      />
+    </div>
+  );
+}
+
 /* ── Main page ── */
 function MenuInner() {
   const qc = useQueryClient();
@@ -147,11 +207,11 @@ function MenuInner() {
 
   const { data: items = [], isLoading } = useQuery<MenuItem[]>({
     queryKey: ["admin-menu"],
-    queryFn:  () => api.get("products?size=100").then((r) => r.data.data?.content ?? []),
+    queryFn:  () => api.get("v1/products?size=100").then((r) => r.data.data?.content ?? []),
   });
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["admin-categories"],
-    queryFn:  () => api.get("categories").then((r) => r.data.data ?? []),
+    queryFn:  () => api.get("v1/categories").then((r) => r.data.data ?? []),
   });
 
   const toggleAvail = useMutation({
@@ -216,7 +276,7 @@ function MenuInner() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
-                {["Dish", "Category", "Price", "Discount", "Type", "Status", "Actions"].map((h) => (
+                {["Image", "Dish", "Category", "Price", "Discount", "Type", "Status", "Actions"].map((h) => (
                   <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
                 ))}
               </tr>
@@ -228,6 +288,9 @@ function MenuInner() {
                   VEGAN: "text-emerald-700 bg-emerald-50", JAIN: "text-orange-700 bg-orange-50" }[item.foodType] ?? "";
                 return (
                   <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-3">
+                      <ImageCell item={item} />
+                    </td>
                     <td className="px-4 py-3">
                       <p className="font-medium text-gray-900 leading-tight">{item.name}</p>
                       {item.description && <p className="text-xs text-gray-400 line-clamp-1 mt-0.5">{item.description}</p>}
@@ -284,7 +347,9 @@ function MenuInner() {
 }
 
 export default function MenuPage() {
-  const [qc] = useState(() => new QueryClient());
+  const [qc] = useState(() => new QueryClient({
+    defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } },
+  }));
   return (
     <QueryClientProvider client={qc}>
       <AdminShell><MenuInner /></AdminShell>

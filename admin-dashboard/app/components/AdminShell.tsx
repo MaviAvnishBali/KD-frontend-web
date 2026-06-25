@@ -5,16 +5,17 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, UtensilsCrossed, Tag, ShoppingBag,
-  Users, CalendarDays, LogOut, Menu, X, ChevronRight,
+  Users, CalendarDays, LogOut, Menu, X, ChevronRight, PartyPopper,
 } from "lucide-react";
 
 const NAV = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/menu",      icon: UtensilsCrossed, label: "Menu & Dishes" },
-  { href: "/offers",    icon: Tag,             label: "Offers & Banners" },
-  { href: "/orders",    icon: ShoppingBag,     label: "Orders" },
-  { href: "/reservations", icon: CalendarDays, label: "Reservations" },
-  { href: "/customers", icon: Users,           label: "Customers" },
+  { href: "/dashboard",  icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/menu",       icon: UtensilsCrossed, label: "Menu & Dishes" },
+  { href: "/offers",     icon: Tag,             label: "Offers & Banners" },
+  { href: "/orders",     icon: ShoppingBag,     label: "Orders" },
+  { href: "/reservations", icon: CalendarDays,  label: "Reservations" },
+  { href: "/party-hall", icon: PartyPopper,     label: "Party Hall" },
+  { href: "/customers",  icon: Users,           label: "Customers" },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {

@@ -297,7 +297,9 @@ function OffersInner() {
 }
 
 export default function OffersPage() {
-  const [qc] = useState(() => new QueryClient());
+  const [qc] = useState(() => new QueryClient({
+    defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } },
+  }));
   return (
     <QueryClientProvider client={qc}>
       <AdminShell><OffersInner /></AdminShell>

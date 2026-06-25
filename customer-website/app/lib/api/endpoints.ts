@@ -4,6 +4,7 @@ import type {
   AuthResponse, UserProfile, Address,
   Category, MenuItem, Cart, Order, Reservation, Loyalty,
   Banner, Offer,
+  PartyHallBooking, CreatePartyHallBookingRequest,
 } from "./types";
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
@@ -143,6 +144,16 @@ export const reservationApi = {
 // ── Loyalty ───────────────────────────────────────────────────────────────────
 export const loyaltyApi = {
   get: () => api.get<ApiResponse<Loyalty>>("loyalty"),
+};
+
+// ── Party Hall ────────────────────────────────────────────────────────────────
+export const partyHallApi = {
+  book: (payload: CreatePartyHallBookingRequest) =>
+    api.post<ApiResponse<PartyHallBooking>>("party-hall/bookings", payload),
+  myBookings: () =>
+    api.get<ApiResponse<PartyHallBooking[]>>("party-hall/bookings/me"),
+  cancel: (id: string) =>
+    api.delete<ApiResponse<null>>(`party-hall/bookings/${id}`),
 };
 
 // ── Banners & Offers ──────────────────────────────────────────────────────────

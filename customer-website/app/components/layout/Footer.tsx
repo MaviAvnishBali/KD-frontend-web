@@ -7,6 +7,7 @@ const links = {
   Explore: [
     { label: "Menu",        href: "/menu" },
     { label: "Reserve",     href: "/reservations" },
+    { label: "Party Hall",  href: "/party-hall" },
     { label: "Offers",      href: "/offers" },
     { label: "Catering",    href: "/catering" },
   ],
